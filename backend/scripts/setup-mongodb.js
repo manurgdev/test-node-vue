@@ -11,7 +11,9 @@ const { MongoClient } = require('mongodb')
 const fs = require('fs')
 const path = require('path')
 const readline = require('readline')
-const { spawn } = require('child_process')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const rl = readline.createInterface({
   input: process.stdin,

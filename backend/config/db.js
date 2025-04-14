@@ -16,9 +16,14 @@ const connectDB = async () => {
     const mongoUri = process.env.MONGODB_URI || 
                      process.env.MONGODB_DOCKER_URI || 
                      process.env.MONGODB_LOCAL_URI || 
-                     'mongodb://localhost:27017/app'
+                     'mongodb://localhost:27017/tramitech'
     
-    console.log(`Intentando conectar a MongoDB en: ${mongoUri.replace(/\/\/([^:]+):[^@]+@/, '//***:***@')}`)
+    // Ocultar credenciales en los logs
+    const safeUri = mongoUri.includes('@') ? 
+      mongoUri.replace(/\/\/([^:]+):[^@]+@/, '//***:***@') : 
+      mongoUri
+    
+    console.log(`Intentando conectar a MongoDB en: ${safeUri}`)
     
     const conn = await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 5000
@@ -49,4 +54,4 @@ const connectDB = async () => {
   }
 }
 
-module.exports = connectDB 
+module.exports = connectDB

@@ -1,53 +1,47 @@
-.PHONY: dev prod build-dev build-prod down clean setup-mongodb install-deps
+.PHONY: up down build logs clean dev prod help
 
-# Development environment
-dev: build-dev
-	docker compose up
+# Variables
+DC=docker compose
 
-# Production environment
-prod: build-prod
-	docker compose -f docker-compose.prod.yml up
-
-# Build development images
-build-dev:
-	docker compose build
-
-# Build production images
-build-prod:
-	docker compose -f docker-compose.prod.yml build
-
-# Stop containers
-down:
-	docker compose down
-	docker compose -f docker-compose.prod.yml down
-
-# Clean (remove containers, volumes, and images)
-clean: down
-	docker system prune -af --volumes
-
-# Install dependencies locally (optional)
-install-deps: install-frontend install-backend
-
-install-frontend:
-	cd frontend && npm install
-
-install-backend:
-	cd backend && npm install
-
-# Setup MongoDB (docker or local)
-setup-mongodb:
-	cd backend && npm run setup-mongodb
-
-# Show available commands
+# Comandos
 help:
-	@echo "Available commands:"
-	@echo "  make dev              - Start development environment with Docker"
-	@echo "  make prod             - Start production environment with Docker"
-	@echo "  make build-dev        - Build development Docker images"
-	@echo "  make build-prod       - Build production Docker images"
-	@echo "  make down             - Stop all containers"
-	@echo "  make clean            - Remove all Docker resources"
-	@echo "  make setup-mongodb    - Setup MongoDB (assistant for configuring MongoDB)"
-	@echo "  make install-deps     - Install all dependencies locally (frontend & backend)"
-	@echo "  make install-frontend - Install frontend dependencies locally"
-	@echo "  make install-backend  - Install backend dependencies locally" 
+	@echo "Comandos disponibles:"
+	@echo "  make dev     - Iniciar entorno de desarrollo"
+	@echo "  make prod    - Iniciar entorno de producción"
+	@echo "  make up      - Iniciar los contenedores (desarrollo)"
+	@echo "  make down    - Detener y eliminar contenedores"
+	@echo "  make build   - Reconstruir las imágenes (desarrollo)"
+	@echo "  make build-prod - Reconstruir las imágenes (producción)"
+	@echo "  make logs    - Ver logs de los contenedores"
+	@echo "  make clean   - Eliminar contenedores, imágenes y volúmenes"
+
+# Entornos completos
+dev: build
+	$(DC) up
+
+prod: build-prod
+	$(DC) -f docker-compose.prod.yml up -d
+
+# Comandos individuales
+up:
+	$(DC) up -d
+
+down:
+	$(DC) down
+	$(DC) -f docker-compose.prod.yml down
+
+build:
+	$(DC) build
+
+build-prod:
+	$(DC) -f docker-compose.prod.yml build
+
+logs:
+	$(DC) logs -f
+
+clean:
+	$(DC) down -v --rmi all
+	$(DC) -f docker-compose.prod.yml down -v --rmi all
+
+# Valor por defecto
+.DEFAULT_GOAL := help
