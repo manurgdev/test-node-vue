@@ -1,179 +1,167 @@
-# Node.js + Vue.js Dockerized Project
+# Calculadora de Coste/Hora TramiTech
 
-Este proyecto contiene una aplicación con backend Node.js (Express) y frontend Vue.js, configurada para ejecutarse con o sin Docker.
+Aplicación web para calcular el coste por hora facturable de consultores, según variables financieras y contables.
 
-## Requisitos
+## Requisitos Previos
 
-### Opción 1: Con Docker (recomendado)
+### Para ejecución local
+- Node.js (v18 o superior)
+- MongoDB (instalado localmente o acceso a una instancia remota)
+
+### Para ejecución con Docker
 - Docker
 - Docker Compose
-- Make (opcional, para usar comandos simplificados)
-
-### Opción 2: Sin Docker
-- Node.js 20.x o superior
-- npm
-- MongoDB (local o remoto)
 
 ## Estructura del Proyecto
 
-```
-.
-├── backend/             # API con Express.js + MongoDB
-├── frontend/            # Aplicación Vue.js
-├── docker-compose.yml   # Configuración para desarrollo
-├── docker-compose.prod.yml # Configuración para producción
-└── Makefile             # Comandos simplificados
-```
+El proyecto se compone de dos partes principales:
 
-## Tecnologías
+- **Backend**: API REST con Node.js y Express
+- **Frontend**: Interfaz de usuario con Vue 3 y TypeScript
 
-- **Backend**: Node.js + Express + MongoDB (Mongoose)
-- **Frontend**: Vue 3 + TypeScript
-- **Base de datos**: MongoDB
-- **Contenedores**: Docker
+## Instalación y Ejecución
 
-## Opciones de Ejecución
+### Opción 1: Utilizando Docker (Recomendado)
 
-### Opción 1: Usando Docker (recomendado)
+La manera más sencilla de ejecutar la aplicación es utilizando Docker Compose:
 
-#### Usando Make
+Primero, asegúrate de tener los ficheros .env en las carpetas backend y frontend.
 
 ```bash
 # Iniciar entorno de desarrollo
 make dev
 
-# Iniciar entorno de producción
+# O iniciar entorno de producción
 make prod
 
-# Construir imágenes de desarrollo
-make build-dev
+# O si prefieres usar Docker Compose directamente
+docker compose up -d                    # Desarrollo
+docker compose -f docker-compose.prod.yml up -d  # Producción
+```
 
-# Construir imágenes de producción
+La aplicación estará disponible en:
+- **Entorno de Desarrollo**:
+  - Frontend: http://localhost:8080
+  - Backend API: http://localhost:3000
+
+- **Entorno de Producción**:
+  - Frontend: http://localhost:80
+  - Backend API: http://localhost:3000
+
+Otros comandos útiles:
+```bash
+
+# Reconstruir imágenes de desarrollo
+make build
+
+# Reconstruir imágenes de producción
 make build-prod
 
-# Detener todos los contenedores
+# Detener contenedores
 make down
 
-# Limpiar todos los recursos Docker (contenedores, volúmenes, imágenes)
+# Limpiar todo (contenedores, imágenes, volúmenes)
 make clean
-
-# Ver comandos disponibles
-make help
 ```
 
-#### Usando Docker Compose directamente
+### Opción 2: Instalación Local
+
+#### Backend
+
+1. Instalar dependencias:
 
 ```bash
-# Desarrollo
-docker compose up --build
-
-# Producción
-docker compose -f docker-compose.prod.yml up --build
-
-# Detener contenedores
-docker compose down
-```
-
-### Opción 2: Sin Docker (ejecución local)
-
-#### Configurar MongoDB
-
-Tienes varias opciones para configurar MongoDB:
-
-1. **MongoDB local**: Instala MongoDB en tu máquina local
-2. **MongoDB Atlas**: Crea una cuenta gratuita en MongoDB Atlas
-3. **Otra instancia de MongoDB**: Usa cualquier otra instancia de MongoDB
-
-Edita el archivo `.env` en la raíz del proyecto para configurar la conexión:
-
-```
-# Descomentar y editar la opción deseada
-# MONGODB_LOCAL_URI=mongodb://localhost:27017/app
-# MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/app?retryWrites=true&w=majority
-```
-
-#### Instalar y ejecutar el backend
-
-```bash
-# Instalar dependencias
 cd backend
 npm install
-
-# Ejecutar en desarrollo
-npm run dev
-
-# Ejecutar en producción
-npm start
 ```
 
-#### Instalar y ejecutar el frontend
+2. Configurar la base de datos:
+
+   - Si tienes MongoDB instalado localmente, asegúrate de que esté corriendo.
+   - Si no, puedes utilizar Docker para levantar una instancia de MongoDB:
 
 ```bash
-# Instalar dependencias
+docker run -d --name mongo-db -p 27017:27017 mongo
+```
+
+Crea un archivo `.env` en la carpeta `/backend` con la siguiente configuración:
+
+```
+NODE_ENV=development
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/tramitech
+```
+
+3. Inicializar la configuración en la base de datos:
+
+```bash
+npm run init-config
+```
+
+4. Iniciar el servidor:
+
+```bash
+npm run dev    # Desarrollo
+npm start      # Producción
+```
+
+#### Frontend
+
+1. Instalar dependencias:
+
+```bash
 cd frontend
 npm install
-
-# Ejecutar en desarrollo
-npm run dev
-
-# Construir para producción
-npm run build
 ```
 
-## Acceso a las Aplicaciones
+Recuerda actualizar el archivo `.env` con la URL del backend:
 
-- **Frontend (Desarrollo)**: http://localhost:5173
-- **Frontend (Producción)**: http://localhost:80
-- **Backend API**: http://localhost:3000
-- **MongoDB**: mongodb://localhost:27017 (solo accesible en desarrollo)
-
-## Desarrollo con Docker
-
-El entorno de desarrollo monta los directorios locales como volúmenes, lo que permite:
-
-- Cambios en tiempo real (hot-reload)
-- No necesita instalar dependencias localmente
-- Entorno consistente entre desarrolladores
-
-## API Endpoints
-
-- `GET /` - Verificar estado del servidor y conexión a la base de datos
-- `GET /db-status` - Verificar estado detallado de la conexión a MongoDB
-- `GET /items` - Obtener todos los items
-- `GET /items/:id` - Obtener un item por ID
-- `POST /items` - Crear nuevo item
-- `PUT /items/:id` - Actualizar un item
-- `DELETE /items/:id` - Eliminar un item
-
-## Base de Datos
-
-### Configuración en Docker
-- **Host**: mongodb
-- **Puerto**: 27017
-- **Base de datos**: app
-- **Usuario**: admin
-- **Contraseña**: password
-
-### Configuración sin Docker
-Configura las variables de entorno en el archivo `.env` según tu instancia de MongoDB.
-
-## Verificar Conexión a la Base de Datos
-
-Puedes verificar si la aplicación está correctamente conectada a MongoDB visitando:
 ```
-http://localhost:3000/db-status
+VITE_API_URL=http://localhost:3000
 ```
 
-## Resolución de Problemas
+2. Iniciar el servidor de desarrollo:
 
-Si tienes problemas con la conexión a MongoDB:
+```bash
+npm run dev    # Desarrollo
+npm run build  # Producción (genera archivos estáticos en /dist)
+```
 
-1. Verifica que la instancia de MongoDB esté ejecutándose
-2. Revisa la configuración en el archivo `.env`
-3. Consulta los logs del servidor para ver mensajes de error específicos
+La aplicación estará disponible en:
+- Frontend (desarrollo): http://localhost:5173
+- Backend API: http://localhost:3000
 
-## Notas
+## Diferencias entre Entornos
 
-- El frontend en producción se sirve a través de Nginx cuando se usa Docker
-- En producción, las solicitudes a `/api/` desde el frontend se redirigen automáticamente al backend
-- Los datos de MongoDB se persisten usando volúmenes de Docker (cuando se usa Docker) 
+### Entorno de Desarrollo
+- Hot-reloading activado tanto en frontend como en backend
+- Mapeo de volúmenes para permitir cambios en tiempo real
+- Optimizado para desarrollo y depuración
+
+### Entorno de Producción
+- Frontend servido por Nginx optimizado para producción
+- Backend optimizado para rendimiento
+- Configurado para mayor estabilidad
+
+## Funcionalidades
+
+- Cálculo de coste/hora facturable basado en:
+  - Nivel de experiencia del consultor
+  - Tipo de proyecto
+  - Horario de trabajo
+  - Costes indirectos
+  - Margen de beneficio
+  - IVA aplicable
+  
+- Visualización detallada del desglose de costes
+- Personalización de parámetros avanzados (costes indirectos, horas facturables)
+
+## Tecnologías Utilizadas
+
+- **Backend**: Node.js, Express, MongoDB, Mongoose
+- **Frontend**: Vue 3, TypeScript, Tailwind CSS
+- **Contenedores**: Docker, Docker Compose
+
+## Developers
+
+- ManuRGDev
