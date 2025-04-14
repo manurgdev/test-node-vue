@@ -1,6 +1,6 @@
 <script setup lang="ts">
 withDefaults(defineProps<{
-  msg: string
+  msg?: string
 }>(), {
   msg: 'Welcome to Tramitech'
 })
