@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import TitleText from './components/TitleText.vue'
 </script>
 
 <template>
@@ -9,11 +9,10 @@ import HelloWorld from './components/HelloWorld.vue'
       <img alt="Vue logo" class="w-32 h-32 mx-auto mb-8" src="@/assets/logo.svg" />
 
       <div class="max-w-4xl mx-auto">
-        <HelloWorld msg="You did it!" />
+        <TitleText />
 
         <nav class="mt-8 text-center">
-          <RouterLink to="/" class="inline-block px-4 py-2 text-gray-700 hover:text-indigo-600 transition-colors border-l border-gray-300 first:border-0">Home</RouterLink>
-          <RouterLink to="/about" class="inline-block px-4 py-2 text-gray-700 hover:text-indigo-600 transition-colors border-l border-gray-300">About</RouterLink>
+          <RouterLink to="/" class="inline-block px-4 py-2 text-gray-700 hover:text-indigo-600 transition-colors border-l border-gray-300 first:border-0">Calculator View</RouterLink>
         </nav>
       </div>
     </header>
