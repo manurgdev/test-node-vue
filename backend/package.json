@@ -13,12 +13,12 @@
   "author": "ManuRGDev",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0",
-    "mongoose": "^8.0.0",
     "dotenv": "^16.3.1",
-    "mongodb": "^6.0.0"
+    "express": "^5.1.0",
+    "mongodb": "^6.0.0",
+    "mongoose": "^8.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.1.9"
   }
 }
