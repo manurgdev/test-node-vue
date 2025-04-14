@@ -41,7 +41,7 @@ docker compose -f docker-compose.prod.yml up -d  # Producción
 
 La aplicación estará disponible en:
 - **Entorno de Desarrollo**:
-  - Frontend: http://localhost:8080
+  - Frontend: http://localhost:5173
   - Backend API: http://localhost:3000
 
 - **Entorno de Producción**:
