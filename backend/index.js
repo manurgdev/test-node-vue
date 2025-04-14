@@ -54,9 +54,14 @@ connectDB().then(connection => {
     })
   })
 
+  // Rutas de la API
   const itemRoutes = require('./routes/items')
+  const configRoutes = require('./routes/config')
+  const calculatorRoutes = require('./routes/calculator')
 
   app.use('/items', itemRoutes)
+  app.use('/config', configRoutes)
+  app.use('/calculator', calculatorRoutes)
 
   app.use((req, res) => {
     res.status(404).json({ message: 'Route not found' })
